@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      #wrapper {
+        position: relative;
+        width: 960px;
+        height: 320px;
+        border: 1px solid #f00;
+        margin: 100px auto;
+        overflow: hidden;
+      }
+
+      #container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 3840px;
+        overflow: hidden;
+      }
+
+      #container li {
+        float: left;
+      }
+
+      .prev,
+      .next {
+        position: absolute;
+        /* top: 50%;
+            margin-top:-40px; */
+        top: 120px;
+        width: 60px;
+        height: 80px;
+        background: url(img/btn_show.png) no-repeat;
+      }
+
+      .prev {
+        left: 0;
+        background-position: 0 -80px;
+      }
+
+      .next {
+        right: 0;
+      }
+
+      #pag {
+        position: absolute;
+        left: 430px;
+        bottom: 20px;
+      }
+
+      #pag span {
+        float: left;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        text-align: center;
+        line-height: 20px;
+        background-color: blue;
+        color: white;
+      }
+      #pag .active {
+        background-color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <ul id="container">
+        <li><img src="img/1.jpg" alt="" /></li>
+        <li><img src="img/2.jpg" alt="" /></li>
+        <li><img src="img/3.jpg" alt="" /></li>
+        <li><img src="img/4.jpg" alt="" /></li>
+      </ul>
+      <a href="javascript:void(0)" class="prev"></a>
+      <a href="javascript:void(0)" class="next"></a>
+      <div id="pag">
+        <span class="active">1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+      </div>
+    </div>
+    <script src="common.js"></script>
+    <script>
+      var wrapper = document.getElementById("wrapper"),
+        container = document.getElementById("container"),
+        btns = wrapper.getElementsByTagName("a"),
+        spans = wrapper.getElementsByTagName("span");
+
+      var n = 0;
+      var clock = setInterval(autoPlay, 2000);
+
+      wrapper.onmouseover = function() {
+        clearInterval(clock);
+      };
+
+      wrapper.onmouseout = function() {
+        clock = setInterval(autoPlay, 2000);
+      };
+
+      btns[1].onclick = function() {
+        autoPlay();
+      };
+
+      btns[0].onclick = function() {
+        // -2+1
+        n -= 2;
+        autoPlay();
+      };
+
+      for (var i = 0; i < spans.length; i++) {
+        spans[i].index = i;
+        spans[i].onclick = function() {
+          n = this.index;
+          n--;
+          autoPlay();
+        };
+      }
+
+      function autoPlay() {
+        n++;
+        if (n === 4) {
+          n = 0;
+        } else if (n === -1) {
+          n = 3;
+        }
+        move(container, "left", 40, -960 * n);
+
+        for (var j = 0; j < spans.length; j++) {
+          spans[j].className = "";
+        }
+        spans[n].className = "active";
+      }
+    </script>
+  </body>
+</html>
